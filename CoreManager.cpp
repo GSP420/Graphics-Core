@@ -1,4 +1,3 @@
-
 #include "CoreManager.h"
 
 
@@ -45,7 +44,7 @@ void CoreManager::clearMesh() {
 void CoreManager::TextInit(DWORD size) {
 
 		
-		text->Init(size, manager->GetDevice());
+		text->Init(size, manager.GetDevice());
 
 }
 
@@ -62,7 +61,7 @@ void CoreManager::CamInit(D3DXVECTOR3 _pos, D3DXVECTOR3 _look, D3DXVECTOR3 _up, 
 
 void CoreManager::DXInit(HWND hWnd, int width, int height, bool windowed) {
 
-		manager->Init(hWnd, width, height, windowed);
+		manager.Init(hWnd, width, height, windowed);
 
 }
 
@@ -74,25 +73,25 @@ void CoreManager::Update() {
 
 void CoreManager::BeginRender() {
 
-		manager->BeginScene();
+		manager.BeginScene();
 
 }
 
 void CoreManager::EndRender () {
 
-		manager->EndScene(); 
+		manager.EndScene(); 
 
 }
 
 void CoreManager::DXPresent (){
 
-		manager->Present();
+		manager.Present();
 
 }
 
 void CoreManager::Shutdown () {
 
-		manager->Shutdown();
+		manager.Shutdown();
 
 }
 
