@@ -53,7 +53,7 @@ public:
 	}
 
 	~CoreManager() {
-
+		Shutdown();
 	}
 
 
