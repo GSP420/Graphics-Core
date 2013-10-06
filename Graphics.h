@@ -15,6 +15,7 @@
 #include "Meshes.h"
 #include "Text.h"
 #include "DXManager.h"
+#include "LightClass.h"
 
 
 #include MakePath(DXIncludePath, d3d9.h)

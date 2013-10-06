@@ -59,6 +59,24 @@ void CoreManager::CamInit(D3DXVECTOR3 _pos, D3DXVECTOR3 _look, D3DXVECTOR3 _up, 
 		cam->Init(_pos, _look, _up, _fov, _ar, _nearClip, _farClip);
 }
 
+void CoreManager::SpotLight(D3DXVECTOR3 _dir, D3DXVECTOR3 _pos, D3DXCOLOR _diffuseColor, D3DXCOLOR _ambientColor){
+	
+	light->createSpotlight(manager.GetDevice, _dir, _pos, _diffuseColor, _ambientColor);
+
+}
+
+void CoreManager::DirectionalLight(D3DXVECTOR3 _dir, D3DXCOLOR _diffuseColor, D3DXCOLOR _ambientColor){
+	
+	light->createDirectionLight(manager.GetDevice, _dir, _diffuseColor, _ambientColor);
+
+}
+
+void CoreManager::PointLight(D3DXVECTOR3 _pos, D3DXCOLOR _diffuseColor, D3DXCOLOR _ambientColor){
+
+	light->createPointLight(manager.GetDevice, _pos, _diffuseColor, _ambientColor);
+
+}
+
 void CoreManager::DXInit(HWND hWnd, int width, int height, bool windowed) {
 
 		manager.Init(hWnd, width, height, windowed);
