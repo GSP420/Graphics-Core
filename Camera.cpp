@@ -94,29 +94,37 @@ void Camera::MoveForward(float distance)
 		look = look + fwd * distance;
 }
 
-void Camera::MoveRight(float distance) 
+void Camera::Strafe(char dir) 
 {
-		D3DXVECTOR3 fwd = look - pos;
+			D3DXVECTOR3 camDir;
+			D3DXVECTOR3 upVec = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 
-		D3DXVECTOR3 right;
+			camDir = look - pos;
+			D3DXVec3Normalize(&camDir, &camDir);
+			// calculate the cross product
+			D3DXVec3Cross(&camDir, &camDir, &upVec);
+			//normalize the camDir vector
+			D3DXVec3Normalize(&camDir, &camDir);
 
-		D3DXVec3Cross(&right, &up, &fwd);
 
-		D3DXVec3Normalize(&right, &right);
-
-		pos = pos + right * distance;
-		look = look + right * distance;
+			if (dir = 'L')
+			{
+				pos +=  camDir * 0.75;
+				look +=  camDir * 0.75;
+			}
+			else
+				pos -=  camDir * 0.75;
+				look -=  camDir * 0.75; 
 }
 
 void Camera::Rotate(float angle) {
-		D3DXMATRIX c, tin, r, tout;
+		        D3DXMATRIX ry;
+                D3DXVECTOR4 result;
+                D3DXVECTOR3 camDir;
+                
+                camDir = look - pos;
+	            D3DXMatrixRotationY(&ry, D3DXToRadian(angle)); 
 
-		D3DXMatrixTranslation(&tin,  -pos.x, -pos.y, -pos.z);
-		D3DXMatrixTranslation(&tout,  pos.x,  pos.y,  pos.z);
-		D3DXMatrixRotationY(&r, D3DXToRadian(angle));
-
-		c = tin * r * tout;
-
-		// look = look * c
-		D3DXVec3TransformCoord(&look, &look, &c);
-	}
+                D3DXVec3Transform(&result, &camDir, &ry);
+                look = pos + D3DXVECTOR3(result.x, result.y, result.z);
+	}	

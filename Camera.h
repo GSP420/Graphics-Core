@@ -24,7 +24,7 @@ public:
 	void dxSetView(LPDIRECT3DDEVICE9 pd3dDevice);
 	void dxGetView(D3DXMATRIX* pm);
 	void MoveForward(float distance);
-	void MoveRight(float distance);
+	void Strafe(char dir);
 	void Rotate(float angle);
 
 };

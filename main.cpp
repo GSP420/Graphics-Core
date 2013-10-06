@@ -4,9 +4,8 @@
 
 #include <windows.h>
 #include <stdio.h>
-#include "Graphics.h"
+#include "CoreManager.h"
 #include "Text.h"
-#include "DXManager.h"
 
 #include MakePath(DXIncludePath, d3d9.h)
 #include MakePath(DXIncludePath, d3dx9.h)
@@ -27,10 +26,9 @@ int Width = 800;
 int Height = 600;
 
 
+LPDIRECT3D9			pD3DObject;
+LPDIRECT3DDEVICE9	pD3DDevice;
 LPD3DXFONT			pFont;
-
-// DXManager to intialize and handle DX functions
-DXManager DXMgr;
 
 LPDIRECT3DVERTEXBUFFER9 pVB;
 
@@ -43,7 +41,39 @@ int NumVertices = 6;
 const int NumMeshes = 1;
 
 
+
 Meshes dwarf;  
+	
+struct ColorVertex
+{
+    D3DXVECTOR3 pos;
+    D3DXVECTOR3 normal;
+    D3DCOLOR color;
+};
+
+/*class CCamera {
+public:
+	D3DXVECTOR3 pos;
+	D3DXVECTOR3 look;
+	D3DXVECTOR3 up;
+
+
+	void MoveForward(float dist) {
+		D3DXVECTOR3 fwd = look - pos;
+		D3DXVec3Normalize(&fwd, &fwd);
+		pos += fwd * dist;
+		look += fwd * dist;
+	}
+
+	CCamera() {
+		pos  = D3DXVECTOR3(0, 10, -20);
+		look = D3DXVECTOR3(0, 5, 0);
+		up   = D3DXVECTOR3(0, 1, 0);
+
+	}
+	~CCamera() {
+	}
+};*/
 
 Camera Cam;
 Camera Cam1;
@@ -52,20 +82,58 @@ Text gText;
 
 void Init() {
 
-	D3DXCreateFont(DXMgr.GetDevice(), 30, 0, FW_BOLD, 0, false, 
+	// create direct3d object
+	pD3DObject = Direct3DCreate9(D3D_SDK_VERSION);
+
+	if (pD3DObject) {
+
+		// create direct3d device
+		D3DPRESENT_PARAMETERS d3dpp;
+		d3dpp.BackBufferCount = 1;
+		d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
+		d3dpp.BackBufferWidth = width;
+		d3dpp.BackBufferHeight = height;
+		d3dpp.Windowed = true;
+		d3dpp.hDeviceWindow = hwnd;
+		d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+		d3dpp.MultiSampleType = D3DMULTISAMPLE_NONE;
+		d3dpp.MultiSampleQuality = 0;
+		d3dpp.EnableAutoDepthStencil = true;
+		d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8;
+		d3dpp.Flags = 0;
+		d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
+		d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+
+		pD3DObject->CreateDevice(
+			D3DADAPTER_DEFAULT,
+			D3DDEVTYPE_HAL,
+			hwnd,
+			D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+			&d3dpp,
+			&pD3DDevice);
+
+
+		// set render states
+		pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
+		pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+
+		pD3DDevice->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_XRGB(100, 100, 100) );
+
+		D3DXCreateFont(pD3DDevice, 30, 0, FW_BOLD, 0, false, 
                   DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY,
                   DEFAULT_PITCH | FF_DONTCARE, TEXT("Times New Roman"), 
                   &pFont);
 
+	}
 	Cam.Init();
 	Cam.SetAR(Width, Height);
 	Cam1.Init();
 	Cam1.SetAR(Width, Height);
 
-	gText.Init(18, DXMgr.GetDevice());
+	gText.Init(18, pD3DDevice);
 
 	// create/init vertex buffer
-	DXMgr.GetDevice()->CreateVertexBuffer( NumVertices * sizeof(ColorVertex), 
+	pD3DDevice->CreateVertexBuffer( NumVertices * sizeof(ColorVertex), 
 		                           0, D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE, 
 								   D3DPOOL_MANAGED, 
 								   &pVB, 0);
@@ -100,7 +168,7 @@ void Init() {
 
 	pVB->Unlock();
 
-	dwarf.load_meshes("Dwarf.x", DXMgr.GetDevice());  
+	dwarf.load_meshes("Dwarf.x", pD3DDevice);  
 	dwarf.pos.z = 10.0f;
 	dwarf.pos.y = 8.0f;
 }
@@ -112,16 +180,16 @@ void Update(float dt) {
 
 	// check for user input
 	if (KEY_DOWN(VK_LEFT)) {
-		Cam1.pos.x = (Cam.pos.x += 0.05);
+		Cam1.Strafe('L');
 	}
 	if (KEY_DOWN(VK_RIGHT)) {
-		Cam1.pos.x = (Cam.pos.x -= 0.05);
+		Cam1.Strafe('R');
 	}
 	if (KEY_DOWN(VK_UP)) {
-		Cam1.pos.z = (Cam.pos.z += 0.1);
+		Cam1.MoveForward(0.5f);
 	}
 	if (KEY_DOWN(VK_DOWN)) {
-		Cam1.pos.z = (Cam.pos.z -= 0.1);
+		Cam1.MoveForward(-0.5f);
 	}
 	if (KEY_DOWN('W')) {
 		Cam1.pos.y = (Cam.pos.y += 0.01);
@@ -150,11 +218,16 @@ void Render() {
 
 
 	if (Wireframe) {
-		DXMgr.GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+		pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 	}
 	else {
-		DXMgr.GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+		pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	}
+
+
+
+	
+
 
 	// set material
 	D3DMATERIAL9 mat;
@@ -169,7 +242,7 @@ void Render() {
 	mat.Specular.g = 0;
 	mat.Specular.b = 1;
 	
-	DXMgr.GetDevice()->SetMaterial(&mat);
+	pD3DDevice->SetMaterial(&mat);
 
 
 	// set light
@@ -180,19 +253,19 @@ void Render() {
 	light.Diffuse.r = 1;
 	light.Diffuse.g = 1;
 	light.Diffuse.b = 1;
-	DXMgr.GetDevice()->SetLight(0, &light);
-	DXMgr.GetDevice()->LightEnable(0, true);
+	pD3DDevice->SetLight(0, &light);
+	pD3DDevice->LightEnable(0, true);
 
-	DXMgr.BeginScene();
+	pD3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(122, 85, 0) , 1.0f, 0);
 
-	Cam1.dxSetProjection(DXMgr.GetDevice());
+	Cam1.dxSetProjection(pD3DDevice);
 
-	Cam1.dxSetView(DXMgr.GetDevice());
+	Cam1.dxSetView(pD3DDevice);
 
-	DXMgr.BeginScene();
+	pD3DDevice->BeginScene();
 
 	
-	dwarf.draw_meshes(DXMgr.GetDevice());
+	dwarf.draw_meshes(pD3DDevice);
 
 
 
@@ -207,22 +280,25 @@ void Render() {
 			DT_TOP | DT_LEFT | DT_NOCLIP , D3DCOLOR_ARGB(255, 
 			255, 
 			255, 
-			255));
+			255			
+			));
 
 	gText.DisplayText("This is printed from the Text class!", 10, 50, 50, 25, WHITE);
 
-	DXMgr.EndScene();
+	pD3DDevice->EndScene();
 
-	DXMgr.Present();
+	pD3DDevice->Present(0, 0, 0, 0);
 
 
 }
 
 void Shutdown() {
 
-	if (DXMgr.GetDevice()) 
-	{
-		DXMgr.Shutdown();
+	if (pD3DDevice) {
+		pD3DDevice->Release();
+	}
+	if (pD3DObject) {
+		pD3DObject->Release();
 	}
 }
 
@@ -325,7 +401,6 @@ int WINAPI WinMain(HINSTANCE _hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	ShowWindow(hwnd, nCmdShow);
 	UpdateWindow(hwnd);
 
-	DXMgr.Init(hwnd, width, height, true);
 	Init();
 
 	float currTime, prevTime;
@@ -362,3 +437,5 @@ int WINAPI WinMain(HINSTANCE _hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	return Msg.wParam;
 }
+
+
