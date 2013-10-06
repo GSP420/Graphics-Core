@@ -17,7 +17,7 @@ void LightClass::createDirectionLight(LPDIRECT3DDEVICE9 &device, D3DXVECTOR3 dir
 	D3DXVec3Normalize((D3DXVECTOR3*) &m_light.Direction, &dir);
 
 	// Set the diffuse color for this m_light
-	m_light.Diffuse = diffuseColor;o
+	m_light.Diffuse = diffuseColor;
 
 	//Set the ambient colot for this m_light
 	m_light.Ambient = ambientColor;
