@@ -14,15 +14,16 @@
 #include "Material.h"
 #include "Meshes.h"
 #include "Text.h"
+#include "DXManager.h"
 
 
 #include MakePath(DXIncludePath, d3d9.h)
 #include MakePath(DXIncludePath, d3dx9.h)
 
-struct ColorVertex
+/*struct ColorVertex
 {
     D3DXVECTOR3 pos;
     D3DXVECTOR3 normal;
     D3DCOLOR color;
 	static IDirect3DVertexDeclaration9* Decl;
-};
+};*/

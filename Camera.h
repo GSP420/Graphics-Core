@@ -16,8 +16,8 @@ public:
 	float		ar;
 	float		nearClip, farClip;
 
-
 	void Init();
+	void Init(D3DXVECTOR3 _pos, D3DXVECTOR3 _look, D3DXVECTOR3 _up, float _fov, float _ar, float _nearClip, float _farClip);
 	void SetAR(int wd, int ht);
 	void dxGetProjection(D3DXMATRIX* pm);
 	void dxSetProjection(LPDIRECT3DDEVICE9 pd3dDevice);

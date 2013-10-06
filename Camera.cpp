@@ -26,6 +26,20 @@ void Camera::Init()
 		farClip = 1000.0;
 }
 
+void Camera::Init(D3DXVECTOR3 _pos, D3DXVECTOR3 _look, D3DXVECTOR3 _up, float _fov, float _ar, float _nearClip, float _farClip)
+{
+		pos = D3DXVECTOR3(0, 10, 0);
+		look = D3DXVECTOR3(0, 10, 1);
+		up = D3DXVECTOR3(0, 1, 0);
+
+		fov = 50;
+
+		ar = 1.0;				// needs to be reset!
+
+		nearClip = 1.0;
+		farClip = 1000.0;
+}
+
 void Camera::SetAR(int wd, int ht)
 {
 

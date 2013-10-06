@@ -18,7 +18,7 @@ GameObject::GameObject (ID3DXMesh* _mesh, D3DMATERIAL9* _mat, char* _name) {
 void CoreManager::loadMesh(LPCSTR name) {
 			
 		name = object->m_name;
-		object->m_mesh.load_meshes(name, manager->GetDevice()); 
+		object->m_mesh.load_meshes(name, manager.GetDevice()); 
 		 
 }
 
