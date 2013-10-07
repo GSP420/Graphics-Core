@@ -12,7 +12,7 @@ class LightClass
 	LightClass();
 	~LightClass();
 
-
+public:
 	void createDirectionLight(LPDIRECT3DDEVICE9 &device, D3DXVECTOR3 dir, D3DXCOLOR diffuseColor, D3DXCOLOR ambientColor);
 	void createPointLight(LPDIRECT3DDEVICE9 &device, D3DXVECTOR3 pos, D3DXCOLOR diffuseColor, D3DXCOLOR ambientColor);
 	void createSpotlight(LPDIRECT3DDEVICE9 &device, D3DXVECTOR3 dir, D3DXVECTOR3 pos, D3DXCOLOR diffuseColor, D3DXCOLOR ambientColor);\

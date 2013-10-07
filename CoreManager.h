@@ -31,8 +31,8 @@ public:
 	GameObject* object;
 	Text* text;
 	Camera* cam;
-	DXManager manager;
-	LightClass* lightbulb;
+	DXManager* manager;
+	LightClass* light;
 
 
 	void loadMesh(LPCSTR name);

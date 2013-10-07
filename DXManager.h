@@ -16,6 +16,7 @@ private:
 	IDirect3DDevice9* pD3DDevice;
 	D3DPRESENT_PARAMETERS d3dpp;
 public:
+	
 
 	DXManager();
 	~DXManager();
@@ -28,4 +29,5 @@ public:
 
 	// Returns a pointer to the Direct3D Device
 	LPDIRECT3DDEVICE9 GetDevice() const {return pD3DDevice;}
+	void UpdateDevice(LPDIRECT3DDEVICE9 tempDevice);
 };

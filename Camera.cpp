@@ -40,7 +40,7 @@ void Camera::Init(D3DXVECTOR3 _pos, D3DXVECTOR3 _look, D3DXVECTOR3 _up, float _f
 		farClip = _farClip;
 }
 
-vvoid Camera::SetAR(int wd, int ht)
+void Camera::SetAR(int wd, int ht)
 {
 
 	ar = (float)wd / (float)ht;

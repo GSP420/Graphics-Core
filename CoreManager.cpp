@@ -18,7 +18,7 @@ GameObject::GameObject (ID3DXMesh* _mesh, D3DMATERIAL9* _mat, char* _name) {
 void CoreManager::loadMesh(LPCSTR name) {
 			
 		name = object->m_name;
-		object->m_mesh.load_meshes(name, manager.GetDevice()); 
+		object->m_mesh.load_meshes(name, manager->GetDevice()); 
 		 
 }
 
@@ -44,7 +44,7 @@ void CoreManager::clearMesh() {
 void CoreManager::TextInit(DWORD size) {
 
 		
-		text->Init(size, manager.GetDevice());
+		text->Init(size, manager->GetDevice());
 
 }
 
@@ -61,25 +61,31 @@ void CoreManager::CamInit(D3DXVECTOR3 _pos, D3DXVECTOR3 _look, D3DXVECTOR3 _up, 
 
 void CoreManager::SpotLight(D3DXVECTOR3 _dir, D3DXVECTOR3 _pos, D3DXCOLOR _diffuseColor, D3DXCOLOR _ambientColor){
 	
-	light->createSpotlight(manager.GetDevice, _dir, _pos, _diffuseColor, _ambientColor);
-
+	LPDIRECT3DDEVICE9 device;
+	device = manager->GetDevice();
+	light->createSpotlight(device, _dir, _pos, _diffuseColor, _ambientColor);
+	manager->UpdateDevice(device);
 }
 
 void CoreManager::DirectionalLight(D3DXVECTOR3 _dir, D3DXCOLOR _diffuseColor, D3DXCOLOR _ambientColor){
 	
-	light->createDirectionLight(manager.GetDevice, _dir, _diffuseColor, _ambientColor);
-
+	LPDIRECT3DDEVICE9 device;
+	device = manager->GetDevice();
+	light->createDirectionLight(device, _dir, _diffuseColor, _ambientColor);
+	manager->UpdateDevice(device);
 }
 
 void CoreManager::PointLight(D3DXVECTOR3 _pos, D3DXCOLOR _diffuseColor, D3DXCOLOR _ambientColor){
 
-	light->createPointLight(manager.GetDevice, _pos, _diffuseColor, _ambientColor);
-
+	LPDIRECT3DDEVICE9 device;
+	device = manager->GetDevice();
+	light->createPointLight(device, _pos, _diffuseColor, _ambientColor);
+	manager->UpdateDevice(device);
 }
 
 void CoreManager::DXInit(HWND hWnd, int width, int height, bool windowed) {
 
-		manager.Init(hWnd, width, height, windowed);
+		manager->Init(hWnd, width, height, windowed);
 
 }
 
@@ -91,25 +97,25 @@ void CoreManager::Update() {
 
 void CoreManager::BeginRender() {
 
-		manager.BeginScene();
+		manager->BeginScene();
 
 }
 
 void CoreManager::EndRender () {
 
-		manager.EndScene(); 
+		manager->EndScene(); 
 
 }
 
 void CoreManager::DXPresent (){
 
-		manager.Present();
+		manager->Present();
 
 }
 
 void CoreManager::Shutdown () {
 
-		manager.Shutdown();
+		manager->Shutdown();
 
 }
 
