@@ -61,26 +61,17 @@ void CoreManager::CamInit(D3DXVECTOR3 _pos, D3DXVECTOR3 _look, D3DXVECTOR3 _up, 
 
 void CoreManager::SpotLight(D3DXVECTOR3 _dir, D3DXVECTOR3 _pos, D3DXCOLOR _diffuseColor, D3DXCOLOR _ambientColor){
 	
-	LPDIRECT3DDEVICE9 device;
-	device = manager->GetDevice();
-	light->createSpotlight(device, _dir, _pos, _diffuseColor, _ambientColor);
-	manager->UpdateDevice(device);
+	light->createSpotlight(manager->GetDevice(), _dir, _pos, _diffuseColor, _ambientColor);
 }
 
 void CoreManager::DirectionalLight(D3DXVECTOR3 _dir, D3DXCOLOR _diffuseColor, D3DXCOLOR _ambientColor){
 	
-	LPDIRECT3DDEVICE9 device;
-	device = manager->GetDevice();
-	light->createDirectionLight(device, _dir, _diffuseColor, _ambientColor);
-	manager->UpdateDevice(device);
+	light->createDirectionLight(manager->GetDevice(), _dir, _diffuseColor, _ambientColor);
 }
 
 void CoreManager::PointLight(D3DXVECTOR3 _pos, D3DXCOLOR _diffuseColor, D3DXCOLOR _ambientColor){
 
-	LPDIRECT3DDEVICE9 device;
-	device = manager->GetDevice();
-	light->createPointLight(device, _pos, _diffuseColor, _ambientColor);
-	manager->UpdateDevice(device);
+	light->createPointLight(manager->GetDevice(), _pos, _diffuseColor, _ambientColor);
 }
 
 void CoreManager::DXInit(HWND hWnd, int width, int height, bool windowed) {

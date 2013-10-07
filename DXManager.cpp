@@ -83,7 +83,7 @@ void DXManager::Shutdown()
 	SAFE_RELEASE(pD3DObject);
 }
 
-void DXManager::UpdateDevice(LPDIRECT3DDEVICE9 tempDevice)
-{
-	pD3DDevice = tempDevice;
-}
+//void DXManager::UpdateDevice(LPDIRECT3DDEVICE9 tempDevice)
+//{
+//	pD3DDevice = tempDevice;
+//}

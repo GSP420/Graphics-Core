@@ -4,7 +4,7 @@
 
 
 
-void LightClass::createDirectionLight(LPDIRECT3DDEVICE9 &device, D3DXVECTOR3 dir, D3DXCOLOR diffuseColor, D3DXCOLOR ambientColor)
+void LightClass::createDirectionLight(LPDIRECT3DDEVICE9 device, D3DXVECTOR3 dir, D3DXCOLOR diffuseColor, D3DXCOLOR ambientColor)
 {
 	//ZeroMemory( &light, sizeof(D3DLIGHT9) );
 	// Create and turn on a directional m_light
@@ -32,7 +32,7 @@ void LightClass::createDirectionLight(LPDIRECT3DDEVICE9 &device, D3DXVECTOR3 dir
 	device->LightEnable (0, TRUE);
 }
 
-void LightClass::createPointLight(LPDIRECT3DDEVICE9 &device, D3DXVECTOR3 pos, D3DXCOLOR diffuseColor, D3DXCOLOR ambientColor)
+void LightClass::createPointLight(LPDIRECT3DDEVICE9 device, D3DXVECTOR3 pos, D3DXCOLOR diffuseColor, D3DXCOLOR ambientColor)
 {	
 
 	//ZeroMemory( &light, sizeof(D3DLIGHT9) );
@@ -58,7 +58,7 @@ void LightClass::createPointLight(LPDIRECT3DDEVICE9 &device, D3DXVECTOR3 pos, D3
 	device->LightEnable (0, TRUE);
 }
 
-void LightClass::createSpotlight(LPDIRECT3DDEVICE9 &device, D3DXVECTOR3 dir, D3DXVECTOR3 pos, D3DXCOLOR diffuseColor, D3DXCOLOR ambientColor)
+void LightClass::createSpotlight(LPDIRECT3DDEVICE9 device, D3DXVECTOR3 dir, D3DXVECTOR3 pos, D3DXCOLOR diffuseColor, D3DXCOLOR ambientColor)
 {
 	//ZeroMemory( &light, sizeof(D3DLIGHT9) );
 	// Set the type of m_light
@@ -86,13 +86,13 @@ void LightClass::createSpotlight(LPDIRECT3DDEVICE9 &device, D3DXVECTOR3 dir, D3D
 	device->LightEnable (0, TRUE);
 }
 
-void LightClass::disableLight(LPDIRECT3DDEVICE9 &device)
+void LightClass::disableLight(LPDIRECT3DDEVICE9 device)
 {
 	device->SetLight (0, NULL);
 	device->LightEnable (0, FALSE);
 }
 
-void LightClass::enableLight(LPDIRECT3DDEVICE9 &device)
+void LightClass::enableLight(LPDIRECT3DDEVICE9 device)
 {
 	device->SetLight (0, &m_light);
 	device->LightEnable (0, TRUE);

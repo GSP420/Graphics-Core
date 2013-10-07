@@ -29,5 +29,5 @@ public:
 
 	// Returns a pointer to the Direct3D Device
 	LPDIRECT3DDEVICE9 GetDevice() const {return pD3DDevice;}
-	void UpdateDevice(LPDIRECT3DDEVICE9 tempDevice);
+	//void UpdateDevice(LPDIRECT3DDEVICE9 tempDevice);
 };
